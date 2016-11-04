@@ -12,4 +12,7 @@ export class Page1 {
     
   }
 
+  sayHello() {
+    console.log("hello world");
+  }
 }
