@@ -1,24 +1,43 @@
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { Page1 } from '../pages/page1/page1';
-import { Page2 } from '../pages/page2/page2';
+import { MyTeamsPage } from '../pages/my-teams/my-teams.page';
+import { StandingsPage } from '../pages/standings/standings.page';
+import { TournamentsPage } from '../pages/tournaments/tournaments.page';
+import { GamePage } from '../pages/game/game.page';
+import { TeamDetailPage } from '../pages/team-detail/team-detail.page';
+import { TeamsPage } from '../pages/teams/teams.page';
+import { TeamHomePage } from '../pages/team-home/team-home.page';
+import { EliteApi } from '../shared/shared';
 
 @NgModule({
   declarations: [
     MyApp,
-    Page1,
-    Page2
+    StandingsPage,
+    TeamHomePage, 
+    MyTeamsPage,
+    GamePage,
+    TeamsPage,
+    TeamDetailPage,
+    TournamentsPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp), HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    Page1,
-    Page2
+    StandingsPage,
+    TeamHomePage,
+    MyTeamsPage,
+    GamePage,
+    TeamDetailPage,
+    TeamsPage,
+    TournamentsPage
   ],
-  providers: []
+  providers: [
+    EliteApi
+  ]
 })
 export class AppModule {}
