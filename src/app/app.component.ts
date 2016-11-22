@@ -1,19 +1,30 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Events, Nav, Platform, LoadingController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-import { MyTeamsPage, TournamentsPage } from '../pages/pages';
+import { MyTeamsPage, TeamHomePage, TournamentsPage } from '../pages/pages';
+import { EliteApi, UserSettingsService } from '../shared/shared';
+import { AgmCoreModule } from 'angular2-google-maps/core';
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html', 
+  providers: [
+    EliteApi,
+    UserSettingsService
+  ]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-
+  favoriteTeams: any;
   rootPage: any = MyTeamsPage;
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform) {
+  constructor(
+    private events: Events,
+    public platform: Platform,
+    private eliteApi: EliteApi,
+    private loadingController: LoadingController,
+    private userSettings: UserSettingsService) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -30,6 +41,8 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       StatusBar.styleDefault();
       Splashscreen.hide();
+      this.refreshFavorites();
+      this.events.subscribe('favorites:changed', () => this.refreshFavorites()); 
     });
   }
 
@@ -44,5 +57,19 @@ export class MyApp {
   }
   goToTournaments() {
     this.nav.push(TournamentsPage);
+  }
+  goToTeam(favoriteTeam) {
+    let loader = this.loadingController.create({
+      content: "Getting data...",
+      dismissOnPageChange: true
+    });
+    loader.present();
+    this.eliteApi.getTournamentData(favoriteTeam.tournamentId).subscribe(l => this.nav.push(TeamHomePage, favoriteTeam.team));
+  }
+
+  refreshFavorites() {
+    this.userSettings.getAllFavorites().then(data => {
+      this.favoriteTeams = data
+    });
   }
 }

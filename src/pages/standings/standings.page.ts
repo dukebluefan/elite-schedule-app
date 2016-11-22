@@ -10,32 +10,49 @@ import * as _ from 'lodash';
   Ionic pages and navigation.
 */
 @Component({
-  
+
   templateUrl: 'standings.page.html'
 })
 export class StandingsPage {
   standings: any[];
   allStandings: any[];
+  divisionFilter = 'division';
   team: any;
 
-  constructor(private navCtrl: NavController, 
-              private navParams: NavParams, 
-              private eliteApi: EliteApi) {
+  constructor(private navCtrl: NavController,
+    private navParams: NavParams,
+    private eliteApi: EliteApi) {
     this.team = this.navParams.data;
     let tourneyData = this.eliteApi.getCurrentTourney();
     this.standings = tourneyData.standings;
-    this.allStandings = _.chain(this.standings)
-                          .groupBy('division')
-                          .toPairs()
-                          .map(item => _.zipObject(['divisionName', 'divisionStandings'], item))
-                          .value();
+    // this.allStandings = _.chain(this.standings)
+    //                       .groupBy('division')
+    //                       .toPairs()
+    //                       .map(item => _.zipObject(['divisionName', 'divisionStandings'], item))
+    //                       .value();
+
     console.log("StandingsPage: ", this.standings);
-    console.log("StandingsPage: ", this.allStandings);
-}
+    //console.log("StandingsPage: ", this.allStandings);
+    this.allStandings = tourneyData.standings;
+    this.filterDivision();
+  }
 
   ionViewDidLoad() {
     console.log('StandingsPage ionViewDidLoad()');
-    
   }
 
+  filterDivision() {
+    if (this.divisionFilter === 'all') {
+      this.standings = this.allStandings;
+    } else {
+      this.standings = _.filter(this.allStandings, s => s.division === this.team.division);
+    }
+  }
+
+  getHeader(record, recordIndex, records) {
+    if (recordIndex === 0 || record.division !== records[recordIndex - 1].division) {
+      return record.division;
+    }
+    return null;
+  }
 }

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { LoadingController, NavController } from 'ionic-angular';
-import { EliteApi } from '../../shared/shared';
+import { EliteApi, UserSettingsService } from '../../shared/shared';
 import { TeamHomePage, TournamentsPage } from '../pages';
 
 @Component({
     templateUrl: "my-teams.page.html"
 })
 export class MyTeamsPage {
-
+    public favorites: any;
+/* Before user settings service
     favorites = [
         {
             team : {
@@ -29,10 +30,14 @@ export class MyTeamsPage {
             tournamentName: "XXX Tournament"
         }
     ];
-
+*/
     constructor(private nav: NavController, 
                 private loadingController: LoadingController,
-                private eliteApi: EliteApi){}
+                private eliteApi: EliteApi, 
+                private userSettings: UserSettingsService) {
+                    
+                }
+
 
     favoriteTapped($event, favorite) {
         let loader = this.loadingController.create({
@@ -47,4 +52,10 @@ export class MyTeamsPage {
         this.nav.push(TournamentsPage);
     }
 
+    ionViewWillEnter () {
+        console.log("MyTeamsPage:ionViewWillEnter()");
+        this.userSettings.getAllFavorites().then(data => {
+            this.favorites = data
+        });
+    }
 }

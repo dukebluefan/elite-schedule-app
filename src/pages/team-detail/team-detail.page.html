@@ -5,20 +5,23 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar>
-  </ion-navbar>
+  <ion-navbar></ion-navbar>
 </ion-header>
 
 <ion-content>
+<!--
   <h2>Team Detail</h2>
   <button ion-button (click)="goHome()">Go Home</button>
-
+-->
+<ion-refresher (ionRefresh)="refreshAll($event)">
+  <ion-refresher-content></ion-refresher-content>
+</ion-refresher>
   <ion-card>
     <ion-card-content>
       <ion-row>
         <ion-col width-50>
-          <h2>Record: {{teamStandings.wins}} - {{teamStandings.losses}}</h2>
-          <p>Coach: {{team.coach}}</p>
+          <h2>Record: {{teamStandings && teamStandings.wins}} - {{teamStandings && teamStandings.losses}}</h2>
+          <p>Coach: {{team && team.coach}}</p>
         </ion-col>
         <ion-col width-50 text-right>
                     <button ion-button icon-left outline (click)="toggleFollow()" *ngIf="!isFollowing">
@@ -49,13 +52,13 @@
             <p>{{game.time | date : 'MM/dd/yy'}}</p>
             <p>{{game.time | date : 'shortTime'}}</p>
           </ion-col>
-          <ion-col width-60>
+          <ion-col width-55>
             <p>{{game.homeAway}} {{game.opponent}}</p>
             <p>{{game.location}}</p>
           </ion-col>
-          <ion-col width-20>
+          <ion-col width-25>
             <h4>{{game.scoreDisplay}}</h4>
-            <ion-badge [color]="getScoreDisplayBadgeClass(game)">{{getScoreWinOrLoss(game)}}</ion-badge>
+            <ion-badge [color]="getScoreDisplayBadgeClass(game)">{{getScoreDisplay(game)}}</ion-badge>
           </ion-col>
         </ion-row>  
       </ion-item>
