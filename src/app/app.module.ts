@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { MapPage } from "../pages/map/map.page";
 import { MyTeamsPage } from '../pages/my-teams/my-teams.page';
@@ -26,7 +27,9 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
     TournamentsPage
   ],
   imports: [
-    IonicModule.forRoot(MyApp), HttpModule, AgmCoreModule.forRoot({})
+    IonicModule.forRoot(MyApp), 
+    HttpModule, 
+    AgmCoreModule.forRoot({ apiKey: 'AIzaSyBbsOlMryAHu2ESwHHSwrDBIUU7fiENNoM'})
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -41,7 +44,9 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
     TournamentsPage
   ],
   providers: [
-    EliteApi, UserSettingsService
+    EliteApi, 
+    Storage,
+    UserSettingsService
   ]
 })
 export class AppModule {}
